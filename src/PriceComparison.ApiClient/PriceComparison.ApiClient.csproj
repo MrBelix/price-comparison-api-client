@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>PriceComparison.ApiClient</PackageId>
-        <Version>0.1.1</Version>
+        <Version>0.1.2</Version>
         <Authors>MrBelix</Authors>
         <RepositoryUrl>https://github.com/MrBelix/price-comparison-api-client</RepositoryUrl>
     </PropertyGroup>

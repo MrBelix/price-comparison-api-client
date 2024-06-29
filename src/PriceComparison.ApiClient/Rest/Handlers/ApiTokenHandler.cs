@@ -3,7 +3,7 @@ using PriceComparison.Contracts.Authentication;
 
 namespace PriceComparison.ApiClient.Rest.Handlers;
 
-public class ApiTokenHandler(RestClient client) : DelegatingHandler
+public class ApiTokenHandler(RestClient client) : DelegatingHandler(new HttpClientHandler())
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {

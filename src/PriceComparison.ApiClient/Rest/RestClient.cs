@@ -21,7 +21,12 @@ public sealed class RestClient : IRestClient
 
     public RestClient(Uri baseUri)
     {
-        _httpClient = new HttpClient(new ApiTokenHandler(this))
+        var apiTokenHandler = new ApiTokenHandler(this)
+        {
+            InnerHandler = new HttpClientHandler()
+        };
+
+        _httpClient = new HttpClient(apiTokenHandler)
         {
             BaseAddress = baseUri,
             DefaultRequestHeaders =
@@ -39,7 +44,7 @@ public sealed class RestClient : IRestClient
     public void SetAccessToken(AccessTokenResponse? accessToken)
     {
         AccessToken = accessToken;
-        AccessTokenChanged(this, accessToken);
+        AccessTokenChanged?.Invoke(this, accessToken);
     }
 
     internal async Task<Response<TResponse>> SendAsync<TResponse>(string uri, HttpMethod method, CancellationToken cancellationToken = default)
