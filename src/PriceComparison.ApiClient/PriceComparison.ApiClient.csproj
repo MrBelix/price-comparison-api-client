@@ -4,13 +4,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>PriceComparison.ApiClient</PackageId>
-        <Version>0.0.1</Version>
+        <Version>0.1.0</Version>
         <Authors>MrBelix</Authors>
         <RepositoryUrl>https://github.com/MrBelix/price-comparison-api-client</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="PriceComparison.Contracts" Version="0.0.4" />
+      <PackageReference Include="PriceComparison.Contracts" Version="0.1.2" />
     </ItemGroup>
 
 </Project>
