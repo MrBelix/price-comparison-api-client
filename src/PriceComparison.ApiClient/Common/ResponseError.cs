@@ -6,5 +6,5 @@ public record ResponseError
 {
     public string? Message { get; init; }
     public string? Code { get; init; }
-    public IImmutableDictionary<string, string>? Details { get; init; }
+    public IImmutableDictionary<string, IImmutableList<string>>? Errors { get; init; }
 }
