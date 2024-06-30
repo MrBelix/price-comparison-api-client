@@ -4,7 +4,7 @@ using PriceComparison.ApiClient.Common;
 using PriceComparison.ApiClient.Rest.Handlers;
 using PriceComparison.ApiClient.Rest.Interfaces;
 using PriceComparison.ApiClient.Rest.Modules;
-using PriceComparison.Contracts.Authentication;
+using PriceComparison.ApiClient.Rest.TokenManagers;
 
 namespace PriceComparison.ApiClient.Rest;
 
@@ -13,20 +13,15 @@ public sealed class RestClient : IRestClient
     private readonly HttpClient _httpClient;
     private readonly Lazy<IAuthModule> _authenticationModule;
 
-    public AccessTokenResponse? AccessToken { get; private set; }
-
-    public event EventHandler<AccessTokenResponse?> AccessTokenChanged;
+    public ITokenManager TokenManager { get; init; }
 
     public IAuthModule Authentication => _authenticationModule.Value;
 
-    public RestClient(Uri baseUri)
+    public RestClient(Uri baseUri, ITokenManager? tokenManager = null)
     {
-        var apiTokenHandler = new ApiTokenHandler(this)
-        {
-            InnerHandler = new HttpClientHandler()
-        };
+        TokenManager = tokenManager ?? new VariableTokenManager();
 
-        _httpClient = new HttpClient(apiTokenHandler)
+        _httpClient = new HttpClient(new ApiKeyHandler(this))
         {
             BaseAddress = baseUri,
             DefaultRequestHeaders =
@@ -39,12 +34,6 @@ public sealed class RestClient : IRestClient
         };
 
         _authenticationModule = new Lazy<IAuthModule>(() => new AuthenticationModule(this));
-    }
-
-    public void SetAccessToken(AccessTokenResponse? accessToken)
-    {
-        AccessToken = accessToken;
-        AccessTokenChanged?.Invoke(this, accessToken);
     }
 
     internal async Task<Response<TResponse>> SendAsync<TResponse>(string uri, HttpMethod method, CancellationToken cancellationToken = default)

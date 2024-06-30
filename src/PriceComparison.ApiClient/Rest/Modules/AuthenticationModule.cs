@@ -4,15 +4,15 @@ using PriceComparison.Contracts.Authentication;
 
 namespace PriceComparison.ApiClient.Rest.Modules;
 
-public class AuthenticationModule(RestClient client) : BaseModule(client), IAuthModule
+public sealed class AuthenticationModule(RestClient client) : BaseModule(client), IAuthModule
 {
     public async Task<Response<AccessTokenResponse>> LoginAsync(LoginRequest request)
     {
         var response = await Client.SendAsync<LoginRequest, AccessTokenResponse>("login", HttpMethod.Post, request);
 
         response.Do(
-            accessToken => Client.SetAccessToken(accessToken),
-            _ => Client.SetAccessToken(null));
+            r => Client.TokenManager.SetTokenAsync(r),
+            _ => Client.TokenManager.SetTokenAsync(null));
 
         return response;
     }
@@ -22,8 +22,8 @@ public class AuthenticationModule(RestClient client) : BaseModule(client), IAuth
         var response = await Client.SendAsync<RefreshTokenRequest, AccessTokenResponse>("refresh", HttpMethod.Post, request);
 
         response.Do(
-            accessToken => Client.SetAccessToken(accessToken),
-            _ => Client.SetAccessToken(null));
+            r => Client.TokenManager.SetTokenAsync(r),
+            _ => Client.TokenManager.SetTokenAsync(null));
 
         return response;
     }
