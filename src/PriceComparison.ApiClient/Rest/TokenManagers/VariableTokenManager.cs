@@ -3,20 +3,17 @@ using PriceComparison.Contracts.Authentication;
 
 namespace PriceComparison.ApiClient.Rest.TokenManagers;
 
-public class VariableTokenManager : ITokenManager
+public class VariableTokenManager : BaseTokenManager
 {
     private AccessTokenResponse? _tokenResponse;
-
-    public event EventHandler<AccessTokenResponse?>? TokenChanged;
-
-    public AccessTokenResponse? GetToken()
+    public override Task<AccessTokenResponse?> GetTokenAsync()
     {
-        return _tokenResponse;
+        return Task.FromResult(_tokenResponse);
     }
 
-    public void SetToken(AccessTokenResponse? token)
+    public override Task UpdateTokenAsync(AccessTokenResponse? token)
     {
         _tokenResponse = token;
-        TokenChanged?.Invoke(this, token);
+        return Task.CompletedTask;
     }
 }

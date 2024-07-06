@@ -1,7 +1,10 @@
+using PriceComparison.ApiClient.Rest.TokenManagers;
+
 namespace PriceComparison.ApiClient.Rest.Interfaces;
 
 public interface IRestClient
 {
-    public ITokenManager TokenManager { get; }
+    public BaseTokenManager TokenManager { get; }
+
     public IAuthModule Authentication { get; }
 }

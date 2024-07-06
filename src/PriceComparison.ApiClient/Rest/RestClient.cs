@@ -13,11 +13,11 @@ public sealed class RestClient : IRestClient
     private readonly HttpClient _httpClient;
     private readonly Lazy<IAuthModule> _authenticationModule;
 
-    public ITokenManager TokenManager { get; init; }
+    public BaseTokenManager TokenManager { get; init; }
 
     public IAuthModule Authentication => _authenticationModule.Value;
 
-    public RestClient(Uri baseUri, ITokenManager? tokenManager = null)
+    public RestClient(Uri baseUri, BaseTokenManager? tokenManager = null)
     {
         TokenManager = tokenManager ?? new VariableTokenManager();
 
@@ -49,7 +49,8 @@ public sealed class RestClient : IRestClient
     {
         var message = new HttpRequestMessage(method, uri)
         {
-            Content = JsonContent.Create(request)
+            Content = JsonContent.Create(request),
+
         };
 
         var response = await _httpClient.SendAsync(message, cancellationToken);
