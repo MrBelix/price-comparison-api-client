@@ -10,9 +10,9 @@ public sealed class AuthenticationModule(RestClient client) : BaseModule(client)
     {
         var response = await Client.SendAsync<LoginRequest, AccessTokenResponse>("login", HttpMethod.Post, request);
 
-        response.Do(
-            r => Client.TokenManager.SetTokenAsync(r),
-            _ => Client.TokenManager.SetTokenAsync(null));
+        var token = response.Match<AccessTokenResponse?>(x => x, _ => null);
+
+        await Client.TokenManager.SetTokenAsync(token);
 
         return response;
     }
@@ -21,9 +21,9 @@ public sealed class AuthenticationModule(RestClient client) : BaseModule(client)
     {
         var response = await Client.SendAsync<RefreshTokenRequest, AccessTokenResponse>("refresh", HttpMethod.Post, request);
 
-        response.Do(
-            r => Client.TokenManager.SetTokenAsync(r),
-            _ => Client.TokenManager.SetTokenAsync(null));
+        var token = response.Match<AccessTokenResponse?>(x => x, _ => null);
+
+        await Client.TokenManager.SetTokenAsync(token);
 
         return response;
     }
