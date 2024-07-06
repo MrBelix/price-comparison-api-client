@@ -9,12 +9,12 @@ public class ApiKeyHandler(IRestClient client) : DelegatingHandler(new HttpClien
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var token = await client.TokenManager.GetTokenAsync();
+        var token = client.TokenManager.GetToken();
 
         if (token?.ExpiresAt <= DateTime.UtcNow)
         {
             await client.Authentication.RefreshTokenAsync(new RefreshTokenRequest(token.RefreshToken));
-            token = await client.TokenManager.GetTokenAsync();
+            token = client.TokenManager.GetToken();
         }
 
         if (token != null)

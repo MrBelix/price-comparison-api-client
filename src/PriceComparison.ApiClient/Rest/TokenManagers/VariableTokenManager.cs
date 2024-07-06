@@ -9,15 +9,14 @@ public class VariableTokenManager : ITokenManager
 
     public event EventHandler<AccessTokenResponse?>? TokenChanged;
 
-    public Task<AccessTokenResponse?> GetTokenAsync()
+    public AccessTokenResponse? GetToken()
     {
-        return Task.FromResult(_tokenResponse);
+        return _tokenResponse;
     }
 
-    public Task SetTokenAsync(AccessTokenResponse? token)
+    public void SetToken(AccessTokenResponse? token)
     {
         _tokenResponse = token;
         TokenChanged?.Invoke(this, token);
-        return Task.CompletedTask;
     }
 }

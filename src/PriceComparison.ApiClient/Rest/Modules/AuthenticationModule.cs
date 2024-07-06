@@ -12,7 +12,7 @@ public sealed class AuthenticationModule(RestClient client) : BaseModule(client)
 
         var token = response.Match<AccessTokenResponse?>(x => x, _ => null);
 
-        await Client.TokenManager.SetTokenAsync(token);
+        Client.TokenManager.SetToken(token);
 
         return response;
     }
@@ -23,7 +23,7 @@ public sealed class AuthenticationModule(RestClient client) : BaseModule(client)
 
         var token = response.Match<AccessTokenResponse?>(x => x, _ => null);
 
-        await Client.TokenManager.SetTokenAsync(token);
+        Client.TokenManager.SetToken(token);
 
         return response;
     }

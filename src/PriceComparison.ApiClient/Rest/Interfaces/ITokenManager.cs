@@ -5,8 +5,8 @@ namespace PriceComparison.ApiClient.Rest.Interfaces;
 public interface ITokenManager
 {
     event EventHandler<AccessTokenResponse?> TokenChanged;
-    
-    Task<AccessTokenResponse?> GetTokenAsync();
 
-    Task SetTokenAsync(AccessTokenResponse? token);
+    AccessTokenResponse? GetToken();
+
+    void SetToken(AccessTokenResponse? token);
 }
