@@ -14,6 +14,7 @@ public abstract class BaseTokenManager
     {
         if (token != await GetTokenAsync())
         {
+            await UpdateTokenAsync(token);
             TokenChanged?.Invoke(this, token);
         }
     }

@@ -13,27 +13,36 @@ public class ApiKeyHandler(IRestClient client) : DelegatingHandler(new HttpClien
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+
+        await Sem.WaitAsync(cancellationToken);
+        try
+        {
+            await TryRefreshToken(cancellationToken);
+        }
+        finally
+        {
+            Sem.Release();
+        }
+
         var token = await client.TokenManager.GetTokenAsync();
 
         if (token != null)
         {
-            await Sem.WaitAsync(cancellationToken);
-            try
-            {
-                await TryRefreshToken(token, cancellationToken);
-            }
-            finally
-            {
-                Sem.Release();
-            }
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
         }
 
         return await base.SendAsync(request, cancellationToken);
     }
 
-    private async Task TryRefreshToken(AccessTokenResponse token, CancellationToken cancellationToken = default)
+    private async Task TryRefreshToken(CancellationToken cancellationToken = default)
     {
+        var token = await client.TokenManager.GetTokenAsync();
+
+        if (token is null)
+        {
+            return;
+        }
+
         if (token.ExpiresAt <= DateTimeOffset.Now.AddMinutes(-1))
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "refresh")
