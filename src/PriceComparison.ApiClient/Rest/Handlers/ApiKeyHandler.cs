@@ -43,7 +43,7 @@ public class ApiKeyHandler(IRestClient client) : DelegatingHandler(new HttpClien
             return;
         }
 
-        if (token.ExpiresAt <= DateTimeOffset.Now.AddMinutes(-1))
+        if (token.ExpiresAt <= DateTimeOffset.Now.AddMinutes(1))
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "refresh")
             {
