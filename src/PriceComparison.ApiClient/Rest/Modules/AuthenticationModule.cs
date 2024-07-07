@@ -16,15 +16,4 @@ public sealed class AuthenticationModule(RestClient client) : BaseModule(client)
 
         return response;
     }
-
-    public async Task<Response<AccessTokenResponse>> RefreshTokenAsync(RefreshTokenRequest request)
-    {
-        var response = await Client.SendAsync<RefreshTokenRequest, AccessTokenResponse>("refresh", HttpMethod.Post, request);
-
-        var token = response.Match<AccessTokenResponse?>(x => x, _ => null);
-
-        await Client.TokenManager.SetTokenAsync(token);
-
-        return response;
-    }
 }
