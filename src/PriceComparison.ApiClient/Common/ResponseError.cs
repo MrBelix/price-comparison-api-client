@@ -9,7 +9,7 @@ public record ResponseError
     public required string Title { get; init; }
 
     [JsonPropertyName("status")]
-    public required string Status { get; init; }
+    public required int Status { get; init; }
 
     [JsonPropertyName("detail")]
     public required string Detail { get; init; }
