@@ -8,8 +8,6 @@ public abstract class BaseTokenManager
 
     public abstract Task<AccessTokenResponse?> GetTokenAsync();
 
-    public abstract Task UpdateTokenAsync(AccessTokenResponse? token);
-
     public async Task SetTokenAsync(AccessTokenResponse? token)
     {
         if (token != await GetTokenAsync())
@@ -18,4 +16,6 @@ public abstract class BaseTokenManager
             TokenChanged?.Invoke(this, token);
         }
     }
+
+    protected abstract Task UpdateTokenAsync(AccessTokenResponse? token);
 }

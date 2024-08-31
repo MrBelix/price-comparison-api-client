@@ -14,6 +14,6 @@ public record ResponseError
     [JsonPropertyName("detail")]
     public required string Detail { get; init; }
 
-    [JsonPropertyName("Errors")]
+    [JsonPropertyName("errors")]
     public IImmutableDictionary<string, IImmutableList<string>> Errors { get; init; } = ImmutableDictionary<string, IImmutableList<string>>.Empty;
 }

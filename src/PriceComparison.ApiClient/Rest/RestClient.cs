@@ -12,10 +12,13 @@ public sealed class RestClient : IRestClient
 {
     private readonly HttpClient _httpClient;
     private readonly Lazy<IAuthModule> _authenticationModule;
+    private readonly Lazy<IUserModule> _userModule;
 
-    public BaseTokenManager TokenManager { get; init; }
+    public BaseTokenManager TokenManager { get; }
 
     public IAuthModule Authentication => _authenticationModule.Value;
+
+    public IUserModule User => _userModule.Value;
 
     public RestClient(Uri baseUri, BaseTokenManager? tokenManager = null)
     {
@@ -34,6 +37,7 @@ public sealed class RestClient : IRestClient
         };
 
         _authenticationModule = new Lazy<IAuthModule>(() => new AuthenticationModule(this));
+        _userModule = new Lazy<IUserModule>(() => new UserModule(this));
     }
 
     internal async Task<Response<TResponse>> SendAsync<TResponse>(string uri, HttpMethod method, CancellationToken cancellationToken = default)
